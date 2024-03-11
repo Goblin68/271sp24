@@ -9,8 +9,25 @@
 // Hint - how many times should loop? How many times should you call malloc?
 unsigned char ***create_base(int size)
 {
-	return NULL;
+	unsigned char*** array = (unsigned char***)malloc(size * sizeof(unsigned char**));
+	if (array == NULL){
+		return NULL;
+	}
+
+    for (int i = 0; i < size; i++) {
+        array[i] = (unsigned char**)malloc(size * sizeof(unsigned char*));
+        for (int j = 0; j < size; j++) {
+			array[i][j] = (unsigned char*)malloc(size*sizeof(unsigned char*));
+
+			array[i][j][0] = 0;
+			array[i][j][1] = 0;
+			array[i][j][2] = 0;
+        }
+
+    }
+	return array;
 }
+
 
 // Calculate z_(n+1) = z_n^2 + c and return the result
 // in C, we accept two complex values and produce a complex output
@@ -18,18 +35,40 @@ unsigned char ***create_base(int size)
 // Hint - don't use exponentiation
 double complex m_seq(double complex z_n, double complex c)
 {
-	double a = 0, b = 0;
-	double complex r = a + b * I;
-	return r;
+	//double a = 0, b = 0;
+	//double complex r = a + b * I;
+	//return r;
+	double complex z_n = 0.0 + 0.0 *I;
+	double complex c = 1.0 + 1.0 *I
+	double complex z_n+1 = z_n*z_n + c *I; //AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA I DONT UNDERSTAND COMPLEX NUMBERS WHY
+	return z_n+1;
 }
 
 // in C we accept a complex value and an integer size and two integer pointers, and populate the integer points with the x and y results
 // I've included sample code to zero out x and y.
 void c2b(double complex c, int size, int *x, int *y)
 {
-	*x = 0;
-	*y = 0;
-	return;
+	//*x = 0;
+	//*y = 0;
+	//return;
+	int x = (int)((creal(c) + 2) * size / 4);
+    int y = (int)((cimag(c) + 2) * size / 4);
+
+	if (x < 0){
+		x = 0;		
+	}
+
+	else{
+		(x >= size ? size - 1 : x);
+	}
+	if (y < 0){
+		y = 0;		
+	}
+
+	else{
+		(y >= size ? size - 1 : y);
+	}
+	return (x,y);
 }
 
 // in C, we use b2c to loop over all pixels rather than relying on randomization
@@ -37,15 +76,35 @@ void c2b(double complex c, int size, int *x, int *y)
 // I've included sample code to work with complex values.
 double complex b2c(int size, int x, int y)
 {
-	double a = 0, b = 0;
-	double complex r = a + b * I;
-	return r;
+	//double a = 0, b = 0;
+	//double complex r = a + b * I;
+	//return r;
+	// def b2c(x,y,size):
+	//return complex((x * 4.0 / size - 2.0), (y * 4.0 / size - 2.0))
+    double real = x * 4.0 / size - 2.0;
+    double imag = y * 4.0 / size - 2.0;
+
+    return real + imag * I;
 }
 
 // in C we accept a complex value, and integer number of iterations, and returns with an int that represents whether c escapes, or exceeds absolute value 2 in iters applications of m_seq.
 // I included the absolute value sample code
+//def escapes(c, iters):
+	//z_n = c
+	//for _ in range(iters):
+		//z_n = m_seq(z_n, c)
+		//if abs(z_n) > 2:
+			//return True
+	//return False
 int escapes(double complex c, int iters)
 {
+	double complex z_n = c;
+	for( int i  = 0; i < iters; i++){
+		z_n = m_seq(z_n, c);
+        if (abs(z_n) > 2) {
+            return abs(c) > 2;
+		}
+	}
 	return abs(c) > 2;
 }
 
